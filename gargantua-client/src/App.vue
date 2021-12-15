@@ -20,7 +20,7 @@ onBeforeMount(() => {
 
 // change theme
 const theme = ref(null)
-function changeTheme (themeName) {
+function setTheme (themeName) {
   if (themeName === 'dark') {
     theme.value = darkTheme
   }
@@ -36,7 +36,7 @@ function changeTheme (themeName) {
 const uiLocale = ref(null)
 const uiDateLocale = ref(null)
 const { locale: i18nLocale } = useI18n({ useScope: 'global' })
-function changeLanguage (languageName) {
+function setLanguage (languageName) {
   if (languageName === 'zh') {
     uiLocale.value = zhCN
     uiDateLocale.value = dateZhCN
@@ -58,7 +58,7 @@ function changeLanguage (languageName) {
 
   <n-config-provider :theme="theme" :locale="uiLocale" :date-locale="uiDateLocale">
 
-    <component :is="layout" @setTheme="changeTheme" @setLanguage="changeLanguage">
+    <component :is="layout" @setTheme="setTheme" @setLanguage="setLanguage">
       <slot />
     </component>
 
@@ -67,9 +67,11 @@ function changeLanguage (languageName) {
 </template>
 
 <style>
+
 #app {
   font-family: v-mono, v-sans, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 </style>

@@ -10,6 +10,8 @@ import 'vfonts/FiraCode.css'
 // i18n
 import { createI18n } from 'vue-i18n'
 import { messages } from './i18n/index'
+// windi css
+import 'virtual:windi.css'
 
 const app = createApp(App)
 const i18n = createI18n({

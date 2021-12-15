@@ -2,5 +2,8 @@
 </script>
 
 <template>
-<p>home</p>
+
+    <p>homegfhgfhgfdhfgdhfghghomegfhgfhgfdhfgdhfghghomegfhgfhgfdhfgdhfghghomegfhgfhgfdhfgdhfghghomegfhgfhgfdhfgdhfghghomegfhgfhgfdhfgdhfghg</p>
+
+
 </template>
