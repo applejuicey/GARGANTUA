@@ -24,4 +24,4 @@ const router = createRouter({
   routes: routes,
 })
 
-export { router };
+export { router }

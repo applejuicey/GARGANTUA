@@ -1,14 +1,14 @@
 <script setup>
 
-import { computed, h } from 'vue';
+import { computed, h } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useStore } from 'vuex'
 import {
-  NAvatar, NButton,
-  NDropdown, NIcon, NText
+  NAvatar, NButton, NDropdown, NIcon, NText
 } from 'naive-ui'
 import {
-  ColorPalette, Language,
-  Person, Settings
+  ColorPalette, Language, Person, Settings, Sunny, Moon, Text,
+  FileTrayFull, ListCircle, DocumentText, HelpCircle
 } from '@vicons/ionicons5'
 
 // general necessities
@@ -16,9 +16,10 @@ function renderIcon (icon) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
 const { t } = useI18n({ useScope: 'global' })
+const store = useStore()
 
-// topnav
-function userDropdownHeader () {
+// user dropdown
+const userDropdownHeader = () => {
   return h(
       'div',
       {
@@ -31,43 +32,56 @@ function userDropdownHeader () {
           src: 'https://07akioni.oss-cn-beijing.aliyuncs.com/demo1.JPG'
         }),
         h('div', null, [
-          h('div', null, [h(NText, { depth: 2 }, { default: () => '打工仔' })]),
+          h('div', null, [h(NText, { depth: 2 }, { default: () => '用户名' })]),
           h('div', { style: 'font-size: 12px;' }, [
             h(
                 NText,
                 { depth: 3 },
-                { default: () => '毫无疑问，你是办公室里最亮的星' }
+                { default: () => '简介简介简介简介简介简介' }
             )
           ])
         ])
       ]
   )
 }
+const userOptions = computed(() => {
+  return [
+    {
+      key: 'header',
+      type: 'render',
+      render: userDropdownHeader
+    },
+    {
+      key: 'header-divider',
+      type: 'divider'
+    },
+    {
+      label: t('layout.topnav.myProfile'),
+      icon: renderIcon(FileTrayFull),
+      key: 'myProfile'
+    },
+    {
+      label: t('layout.topnav.myProjects'),
+      icon: renderIcon(ListCircle),
+      key: 'myProjects'
+    },
+    {
+      label: t('layout.topnav.myDocuments'),
+      icon: renderIcon(DocumentText),
+      key: 'myDocuments'
+    },
+    {
+      label: t('layout.topnav.myGuides'),
+      icon: renderIcon(HelpCircle),
+      key: 'myGuides'
+    }
+  ]
+})
+const handleUserSelect = (key) => {
+  console.log(key)
+}
 
-const userOptions = [
-  {
-    key: 'header',
-    type: 'render',
-    render: userDropdownHeader
-  },
-  {
-    key: 'header-divider',
-    type: 'divider'
-  },
-  {
-    label: '处理群消息 342 条',
-    key: 'stmt1'
-  },
-  {
-    label: '被 @ 58 次',
-    key: 'stmt2'
-  },
-  {
-    label: '加入群 17 个',
-    key: 'stmt3'
-  }
-]
-
+// settings dropdown
 const settingsOptions = computed(() => {
   return [
     {
@@ -77,10 +91,12 @@ const settingsOptions = computed(() => {
       children: [
         {
           label: t('layout.topnav.dark'),
+          icon: renderIcon(Sunny),
           key: 'dark'
         },
         {
           label: t('layout.topnav.light'),
+          icon: renderIcon(Moon),
           key: 'light'
         },
       ]
@@ -91,12 +107,14 @@ const settingsOptions = computed(() => {
       key: 'setLanguage',
       children: [
         {
-          label: t('layout.topnav.english'),
-          key: 'english'
+          label: t('layout.topnav.en'),
+          icon: renderIcon(Text),
+          key: 'en'
         },
         {
-          label: t('layout.topnav.chinese'),
-          key: 'chinese'
+          label: t('layout.topnav.zh'),
+          icon: renderIcon(Language),
+          key: 'zh'
         },
       ]
     },
@@ -106,9 +124,16 @@ const settingsOptions = computed(() => {
     },
   ]
 })
-
-const handleUserSelect = () => {
-
+const handleSettingsSelect = (key) => {
+  if (['dark', 'light'].includes(key)) {
+    store.commit('changeTheme', { themeName: key })
+  }
+  else if (['en', 'zh'].includes(key)) {
+    store.commit('changeLanguage', { languageName: key })
+  }
+  else {
+    console.error('no such theme')
+  }
 }
 
 </script>
@@ -120,24 +145,24 @@ const handleUserSelect = () => {
   </div>
 
   <div class="ml-auto mr-5 flex items-center">
-    <n-dropdown :options="userOptions" @select="handleUserSelect" placement="bottom-end">
+    <n-dropdown :options="userOptions" trigger="hover" @select="handleUserSelect" placement="bottom-end">
       <n-button text class="mr-4">
         <template #icon>
           <n-icon>
             <person />
           </n-icon>
         </template>
-        User
+        {{ t('layout.topnav.user') }}
       </n-button>
     </n-dropdown>
-    <n-dropdown :options="settingsOptions" @select="handleSettingsSelect" placement="bottom-end" >
+    <n-dropdown :options="settingsOptions" trigger="hover" @select="handleSettingsSelect" placement="bottom-end" >
       <n-button text class="mr-4">
         <template #icon>
           <n-icon>
             <settings />
           </n-icon>
         </template>
-        Settings
+        {{ t('layout.topnav.settings') }}
       </n-button>
     </n-dropdown>
   </div>

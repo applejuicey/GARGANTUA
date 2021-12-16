@@ -3,6 +3,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 // router
 import { router } from './routes/index'
+//vuex
+import { store } from './stores/index'
 // v-sans
 import 'vfonts/Lato.css'
 // v-mono
@@ -23,4 +25,5 @@ const i18n = createI18n({
 
 app.use(i18n)
 app.use(router)
+app.use(store)
 app.mount('#app')

@@ -1,7 +1,7 @@
 <script setup>
 
 import TopNavBar from '../components/TopNavBar.vue'
-import {h, ref, defineEmits, computed} from 'vue'
+import { h, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   NCard, NSpace, NButton, NDatePicker, NSwitch,
@@ -15,24 +15,13 @@ import {
     GameController,
 } from '@vicons/ionicons5'
 
-// define emits
-const emit = defineEmits(['setTheme', 'setLanguage'])
-
-// change theme
-const setTheme = (themeName) => {
-  emit('setTheme', themeName)
-}
-
-// change language
-const setLanguage = (languageName) => {
-  emit('setLanguage', languageName)
-}
-
-// menu
-const { t } = useI18n({ useScope: 'global' })
+// general necessities
 function renderIcon (icon) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
+const { t } = useI18n({ useScope: 'global' })
+
+// menu
 const menuOptions = computed(() => {
   return [
     {
@@ -172,7 +161,6 @@ const menuOptions = computed(() => {
 
 // tabs
 const currentTab = ref(1)
-
 const allTabs = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
 function handleClose (name) {
   const { value: tabs } = allTabs
@@ -198,28 +186,7 @@ function handleClose (name) {
   <n-layout position="absolute">
 
     <n-layout-header bordered class="h-64px flex items-center">
-
       <top-nav-bar></top-nav-bar>
-
-
-
-<!--        <n-card>-->
-<!--          <n-space>-->
-<!--            <n-button @click="setTheme('dark')">深色</n-button>-->
-<!--            <n-button @click="setTheme('light')">浅色</n-button>-->
-<!--          </n-space>-->
-<!--          <n-space vertical>-->
-<!--            <n-space>-->
-<!--              <n-button @click="setLanguage('en')">英文</n-button>-->
-<!--              <n-button @click="setLanguage('zh')">中文</n-button>-->
-<!--              <p>{{ t("message.hello") }}</p>-->
-<!--            </n-space>-->
-<!--            <n-date-picker />-->
-<!--          </n-space>-->
-<!--        </n-card>-->
-
-
-
     </n-layout-header>
 
     <n-layout position="absolute" has-sider class="!inset-y-64px">
@@ -233,14 +200,9 @@ function handleClose (name) {
 
             <n-tab-pane v-for="tab in allTabs" :key="tab" :tab="tab.toString()" :name="tab">
               <n-scrollbar x-scrollable>
-                <div style="white-space: nowrap; padding: 12px;">
-                  我们在田野上面找猪 想象中已找到了三只 小鸟在白云上面追逐 它们在树底下跳舞
-                  啦啦啦啦啦啦啦啦咧 啦啦啦啦咧 我们在想象中度过了许多年
-                  想象中我们是如此的疯狂 我们在城市里面找猪 想象中已找到了几百万只
-                  小鸟在公园里面唱歌 它们独自在想象里跳舞 啦啦啦啦啦啦啦啦咧 啦啦啦啦咧
-                  我们在想象中度过了许多年 许多年之后我们又开始想象 啦啦啦啦啦啦啦啦咧
-                </div>
+
               {{ tab }}
+
                 <router-view />
               </n-scrollbar>
 

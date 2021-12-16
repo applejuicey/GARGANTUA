@@ -1,56 +1,70 @@
 <script setup>
 
-import { ref, onBeforeMount, computed } from 'vue'
+import { ref, onBeforeMount, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import defaultLayout from './layouts/DefaultLayout.vue'
 import { NConfigProvider, zhCN, dateZhCN, useOsTheme, darkTheme } from 'naive-ui'
 import { useI18n } from 'vue-i18n'
+import { useStore } from "vuex";
+
+// general necessities
+const store = useStore()
 
 // set layout according to route meta info
 const route = useRoute()
 const layout = computed(() => {
-  console.log(route.meta.layout)
+  console.log('currentlayout', route.meta.layout)
   return (route.meta.layout || defaultLayout)
 })
 
 onBeforeMount(() => {
   // set default theme according to os preference
-  theme.value = useOsTheme().value === 'dark'? darkTheme : null
+  const osPreferTheme = useOsTheme().value
+  store.commit('changeTheme', { themeName: osPreferTheme })
+  theme.value = osPreferTheme === 'dark'? darkTheme : null
 })
 
-// change theme
-const theme = ref(null)
-function setTheme (themeName) {
-  if (themeName === 'dark') {
-    theme.value = darkTheme
-  }
-  else if (themeName === 'light') {
-    theme.value = null
-  }
-  else {
-    console.error('no such theme')
-  }
-}
+const theme = ref(null);
+// change theme according to vuex
+watch(
+    () => store.state.themeName,
+    (curVal, oldVal) => {
+      if (curVal === 'dark') {
+        theme.value = darkTheme
+      }
+      else if (curVal === 'light') {
+        theme.value = null
+      }
+      else {
+        console.error('no such theme')
+        theme.value = null
+      }
+    }
+)
 
-// change language
+// change language according to vuex
 const uiLocale = ref(null)
 const uiDateLocale = ref(null)
 const { locale: i18nLocale } = useI18n({ useScope: 'global' })
-function setLanguage (languageName) {
-  if (languageName === 'zh') {
-    uiLocale.value = zhCN
-    uiDateLocale.value = dateZhCN
-    i18nLocale.value = 'zh'
-  }
-  else if (languageName === 'en') {
-    uiLocale.value = null
-    uiDateLocale.value = null
-    i18nLocale.value = 'en'
-  }
-  else {
-    console.error('no such language')
-  }
-}
+watch(
+    () => store.state.languageName,
+    (curVal, oldVal) => {
+      if (curVal === 'en') {
+        uiLocale.value = null
+        uiDateLocale.value = null
+        i18nLocale.value = 'en'
+      }
+      else if (curVal === 'zh') {
+        uiLocale.value = zhCN
+        uiDateLocale.value = dateZhCN
+        i18nLocale.value = 'zh'
+      }
+      else {
+        console.error('no such language')
+        theme.value = null
+      }
+    }
+)
 
 </script>
 
@@ -58,7 +72,7 @@ function setLanguage (languageName) {
 
   <n-config-provider :theme="theme" :locale="uiLocale" :date-locale="uiDateLocale">
 
-    <component :is="layout" @setTheme="setTheme" @setLanguage="setLanguage">
+    <component :is="layout">
       <slot />
     </component>
 

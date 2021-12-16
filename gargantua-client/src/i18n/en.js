@@ -1,12 +1,18 @@
 const en = {
   layout: {
     topnav: {
+      user: 'User',
+      settings: 'Settings',
       setTheme: 'Set Theme',
       setLanguage: 'Set Language',
-      english: 'English',
-      chinese: 'Chinese',
+      en: 'English',
+      zh: 'Chinese',
       light: 'Light',
-      dark: 'Dark'
+      dark: 'Dark',
+      myProfile: 'My Profiles',
+      myProjects: 'My Projects',
+      myDocuments: 'My Documents',
+      myGuides: 'My Guides',
     },
     footer: {
       introduction: 'Integrated Working Platform for Department of STAT&PROG',
